@@ -1,6 +1,6 @@
-import hello from './hello';
-import { Todo } from './store/todo';
+import { TodoList } from './store/TodoList';
 
-const todo = new Todo('Miha');
+const todoList = new TodoList();
 
-console.log(todo.text);
+todoList.add('Опаньки');
+todoList.add('Да ладно!!!');
