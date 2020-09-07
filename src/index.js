@@ -1,3 +1,6 @@
 import hello from './hello';
+import { Todo } from './store/todo';
 
-console.log(hello('Miha'));
+const todo = new Todo('Miha');
+
+console.log(todo.text);

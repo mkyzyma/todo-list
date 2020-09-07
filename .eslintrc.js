@@ -10,5 +10,10 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'import/prefer-default-export': 'off',
   },
+  parser: 'babel-eslint',
+  plugins: [
+    'babel',
+  ],
 };
