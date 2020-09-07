@@ -14,10 +14,20 @@ class Todo {
 
   toggle() {
     this.completed = !this.completed;
+    return this;
   }
 
   setTitle(title) {
     this.title = title;
+    return this;
+  }
+
+  toPojo() {
+    return {
+      id: this.id,
+      title: this.title,
+      completed: this.completed,
+    };
   }
 }
 

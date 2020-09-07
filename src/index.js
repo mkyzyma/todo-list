@@ -1,6 +1,32 @@
+import feathers from '@feathersjs/feathers';
+import socketio from '@feathersjs/socketio';
+import express from '@feathersjs/express';
+
+import { TodoService } from './service/TodoService';
 import { TodoList } from './store/TodoList';
 
-const todoList = new TodoList();
+const app = express(feathers());
 
-todoList.add('Опаньки');
-todoList.add('Да ладно!!!');
+app.use(express.json());
+
+app.use(express.urlencoded({ extended: true }));
+
+app.use(express.static(__dirname));
+
+app.configure(express.rest());
+
+app.configure(socketio());
+
+app.use('/todos', new TodoService(new TodoList()));
+
+app.use(express.errorHandler());
+
+app.on('connection', (connection) => app.channel('everybody').join(connection));
+
+app.publish(() => app.channel('everybody'));
+
+app.listen(3030).on('listening', () => {
+  console.log('Listening on localhost:3030');
+});
+
+app.service('todos').create({ title: 'Super mega puper task!' });
