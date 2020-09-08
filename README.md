@@ -1,4 +1,4 @@
-# Todo list feathers example
+# Todo list feathers.js/mobx example
 
 Test task for hiring
 
