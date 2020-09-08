@@ -13,8 +13,18 @@ export class TodoService {
     this.todoList = todoList;
   }
 
-  async find() {
-    return this.todoList.toPojo();
+  async find({ query }) {
+    let todos;
+
+    const { completed } = query;
+
+    if (!completed) {
+      todos = this.todoList.all();
+    } else {
+      todos = this.todoList.find(completed === 'true');
+    }
+
+    return todos.map((t) => t.toPojo());
   }
 
   async get(id) {

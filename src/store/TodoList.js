@@ -39,10 +39,37 @@ class TodoList {
     return this.byId(id).setTitle(title);
   }
 
+  all() {
+    return this.todos;
+  }
+
+  find(completed) {
+    return this.todos.filter((t) => t.completed === completed);
+  }
+
   byId(id) {
     return this.todos.find((t) => t.id === id);
   }
 
+  countAll() {
+    return this.all().length;
+  }
+
+  count(completed) {
+    return this.find(completed).length;
+  }
+
+  summary() {
+    return {
+      all: this.countAll(),
+      completed: this.count(true),
+      active: this.count(false),
+    };
+  }
+
+  /**
+   * Test reaction
+   */
   change() {
     reaction(
       () => this.todos.length,
@@ -50,10 +77,6 @@ class TodoList {
         console.log('Todos changed', todos);
       },
     );
-  }
-
-  toPojo() {
-    return this.todos.map((t) => t.toPojo());
   }
 }
 
