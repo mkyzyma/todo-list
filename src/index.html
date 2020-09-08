@@ -4,6 +4,11 @@
   <meta charset="UTF-8">
   <title>Cписок задач</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <style>
+    .overline {
+      text-decoration: line-through;
+    }
+  </style>
 </head>
 <body class="container">
   <main  class="card mt-4">
@@ -44,16 +49,35 @@
       todoInput.value = '';
     }
 
-    function addTodo (todo) {
-      document.getElementById('main').innerHTML += `<div class="alert alert-dark">${todo.title}</div>`;
+    async function toggleTodo(id) {
+      await app.service('todos').patch(id, {});
     }
-    
+
+    function addTodo (todo) {
+      document.getElementById('main').innerHTML += `<div onclick="toggleTodo('${todo.id}')" id="${todo.id}" class="alert alert-primary">${todo.title}</div>`;
+      updateTodo(todo);
+    }
+
+    function updateTodo (todo) {
+      const el = document.getElementById(todo.id);
+      if (todo.completed) {
+        el.classList.remove('alert-primary');
+        el.classList.add('overline');
+        el.classList.add('alert-dark');
+      } else {
+        el.classList.remove('alert-dark');
+        el.classList.remove('overline');
+        el.classList.add('alert-primary');
+      }
+    }    
+
     const main = async () => {
       const todos = await app.service('todos').find();
 
       todos.forEach(addTodo);
 
       app.service('todos').on('created', addTodo);
+      app.service('todos').on('patched', updateTodo);
     };
 
     main();
