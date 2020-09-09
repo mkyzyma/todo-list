@@ -24,7 +24,17 @@
         </div>
       </div>
       </form>
-
+      <div class="toast bg-warning" role="error" aria-live="assertive" data-delay="3000" id="errorToast" style="position: absolute; top: 0; right: 0;">
+        <div class="toast-header">
+            <strong class="mr-auto" id="errorTitle"> Внимание </strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="toast-body" id="errorMessage">
+            <div>It's been a long time since you visited us. We've something special for you. <a href="#">Click here!</a></div>
+        </div>
+      </div>
       <h5 class="card-title mt-5">Задачи</h5>
       </div>
   </main>
@@ -39,18 +49,34 @@
     
     app.configure(feathers.socketio(socket));
 
+    function showError(message, title) {
+        title = title || 'Внимание';
+        $("#errorTitle").text(title);
+        $("#errorMessage").text(message);
+        $("#errorToast").toast('show');
+    }
+    
+
     async function createTodo () {
       const todoInput = document.getElementById('todo-text');
-
-      await app.service('todos').create({
-        title: todoInput.value
-      });
-
+      const title = todoInput.value;
+      
+      try{
+        await app.service('todos').create({
+          title: todoInput.value
+        });
+      } catch (error) {
+        showError(error, 'Ошибка при добавлении задачи');
+      }
       todoInput.value = '';
     }
 
     async function toggleTodo(id) {
-      await app.service('todos').patch(id, {});
+      try {
+        await app.service('todos').patch(id, {});
+      } catch (error) {
+        showError(error, 'Ошибка при сохранении задачи');
+      }
     }
 
     function addTodo (todo) {
@@ -72,12 +98,15 @@
     }    
 
     const main = async () => {
-      const todos = await app.service('todos').find();
+      try{
+        const todos = await app.service('todos').find();
+        todos.forEach(addTodo);
 
-      todos.forEach(addTodo);
-
-      app.service('todos').on('created', addTodo);
-      app.service('todos').on('patched', updateTodo);
+        app.service('todos').on('created', addTodo);
+        app.service('todos').on('patched', updateTodo);
+      } catch(error) {
+        showError(error, 'Ошибка при загрузке данных');
+      }
     };
 
     main();

@@ -1,3 +1,5 @@
+import { BadRequest } from '@feathersjs/errors';
+import config from 'config';
 /**
  *@typedef { import('../store/TodoList').TodoList } TodoList
  *@typedef { import('../store/Todo').Todo } Todo
@@ -11,6 +13,7 @@ export class TodoService {
    */
   constructor(todoList) {
     this.todoList = todoList;
+    this.settings = config.get('settings');
   }
 
   async find({ query }) {
@@ -32,6 +35,9 @@ export class TodoService {
   }
 
   async create({ title }) {
+    if (title.length > this.settings.max_length) {
+      throw new BadRequest(`Длина задачи не должна превышать ${this.settings.max_length} символов`);
+    }
     return this.todoList.add(title);
   }
 

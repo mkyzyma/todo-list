@@ -4,6 +4,7 @@ import express from '@feathersjs/express';
 
 import { TodoService } from './service/TodoService';
 import { TodoSummaryService } from './service/TodoSummaryService';
+
 import { TodoList } from './store/TodoList';
 
 const app = express(feathers());
@@ -21,7 +22,6 @@ app.configure(socketio());
 const todoList = new TodoList();
 
 app.use('/todos', new TodoService(todoList));
-
 app.use('/summary', new TodoSummaryService(todoList));
 
 app.use(express.errorHandler());

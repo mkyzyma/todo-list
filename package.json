@@ -15,6 +15,7 @@
     "eslint": "^7.8.1",
     "eslint-config-airbnb": "18.2.0",
     "eslint-plugin-babel": "^5.3.1",
+    "eslint-plugin-html": "^6.1.0",
     "eslint-plugin-import": "^2.21.2",
     "eslint-plugin-jsx-a11y": "^6.3.0",
     "eslint-plugin-react": "^7.20.0",
@@ -22,9 +23,11 @@
     "nodemon": "^2.0.4"
   },
   "dependencies": {
+    "@feathersjs/errors": "^4.5.8",
     "@feathersjs/express": "^4.5.8",
     "@feathersjs/feathers": "^4.5.8",
     "@feathersjs/socketio": "^4.5.8",
+    "config": "^3.3.1",
     "mobx": "^5.15.6",
     "uuid": "^8.3.0"
   }
